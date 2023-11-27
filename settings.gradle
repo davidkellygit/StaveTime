@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+    versionCatalogs {
+        openCVLibrary310 {
+            from files('gradle/openCVLibrary310.versions.toml')
+        }
+    }
+}
+rootProject.name = "StaveTime"
+include ':app'
+include ':openCV'
+include ':openCV2'
