@@ -9,13 +9,18 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+<!--    <org.opencv.android.JavaCameraView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/cameraView"/>-->
+
     <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:id="@+id/imageView"
-        android:background="#000"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:visibility="visible"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -24,7 +29,8 @@
         android:id="@+id/files"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:visibility="visible"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -33,5 +39,19 @@
         android:id="@+id/camera"
         android:layout_below="@id/files"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:visibility="visible"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/next"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+
+
+
 </RelativeLayout>

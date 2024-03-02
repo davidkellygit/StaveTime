@@ -25,26 +25,18 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 
-//import org.opencv.*;
-//import org.opencv.android.OpenCVLoader;
-//import org.opencv.core.CvType;
-//import org.opencv.core.Mat;
-//import org.opencv.core.MatOfByte;
-//import org.opencv.core.MatOfInt;
-//import org.opencv.core.Scalar;
-//import org.opencv.core.Size;
-//import org.opencv.imgcodecs.Imgcodecs;
-//import org.opencv.imgproc.Imgproc;
-
 public class MainActivity extends AppCompatActivity {
 
-    Button files, camera;
+    // The attributes are defined here.
+    Button files, camera, next;
     ImageView imageView;
     Bitmap bitmap;
     Mat mat;
-    int SELECT_CODE = 100, CAMERA_CODE = 101;
+    int FILES_CODE = 100, CAMERA_CODE = 101;
 
 
+    // The onCreate function is executed as the app opens.
+    // The buttons begin listening for clicks.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +53,20 @@ public class MainActivity extends AppCompatActivity {
         files = findViewById(R.id.files);
         imageView = findViewById(R.id.imageView);
 
+//        // Turn 'next' button invisible
+//        next.setVisibility(View.GONE);
+//        // make 'files' and 'camera' button invisible
+//        files.setVisibility(View.VISIBLE);
+//        camera.setVisibility((View.VISIBLE));
+
+
+
         files.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, SELECT_CODE);
+                startActivityForResult(intent, FILES_CODE);
             }
         });
 
@@ -86,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==SELECT_CODE && data!=null){
+        // Check if the 'files' button has been pressed.
+        if(requestCode==FILES_CODE && data!=null){
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                 imageView.setImageBitmap(bitmap);
@@ -102,8 +103,14 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+//            // The 'Next' button now appears, and the 'Files' and 'Camera' button disappear.
+//            next.setVisibility(View.VISIBLE);
+//            files.setVisibility(View.GONE);
+//            camera.setVisibility(View.GONE);
         }
 
+        // Check if the 'camera' button has been pressed.
         if(requestCode == CAMERA_CODE && data != null){
             bitmap = (Bitmap) data.getExtras().get("data");
 
@@ -115,7 +122,12 @@ public class MainActivity extends AppCompatActivity {
             Utils.matToBitmap(mat, bitmap);
             imageView.setImageBitmap(bitmap);
 
+//            // The 'Next' button now appears, and the 'Files' and 'Camera' button disappear.
+//            next.setVisibility(View.VISIBLE);
+//            files.setVisibility(View.GONE);
+//            camera.setVisibility(View.GONE);
         }
+
     }
 
 
@@ -147,4 +159,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
