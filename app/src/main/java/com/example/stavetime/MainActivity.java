@@ -25,6 +25,9 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 public class MainActivity extends AppCompatActivity {
 
     // The attributes are defined here.
@@ -32,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     Bitmap bitmap;
     Mat mat;
-    int FILES_CODE = 100, CAMERA_CODE = 101;
+    int FILES_CODE = 100;
+    //int CAMERA_CODE = 101;
 
 
     // The onCreate function is executed as the app opens.
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         getPermission();
 
-        camera = findViewById(R.id.camera);
+        //camera = findViewById(R.id.camera);
         files = findViewById(R.id.files);
         imageView = findViewById(R.id.imageView);
 
@@ -70,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        camera.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_CODE);
-            }
-        });
+//        camera.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, CAMERA_CODE);
+//            }
+//        });
 
     }
 
@@ -110,23 +114,23 @@ public class MainActivity extends AppCompatActivity {
 //            camera.setVisibility(View.GONE);
         }
 
-        // Check if the 'camera' button has been pressed.
-        if(requestCode == CAMERA_CODE && data != null){
-            bitmap = (Bitmap) data.getExtras().get("data");
-
-            mat = new Mat();
-            Utils.bitmapToMat(bitmap, mat);
-
-            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
-
-            Utils.matToBitmap(mat, bitmap);
-            imageView.setImageBitmap(bitmap);
-
-//            // The 'Next' button now appears, and the 'Files' and 'Camera' button disappear.
-//            next.setVisibility(View.VISIBLE);
-//            files.setVisibility(View.GONE);
-//            camera.setVisibility(View.GONE);
-        }
+//        // Check if the 'camera' button has been pressed.
+//        if(requestCode == CAMERA_CODE && data != null){
+//            bitmap = (Bitmap) data.getExtras().get("data");
+//
+//            mat = new Mat();
+//            Utils.bitmapToMat(bitmap, mat);
+//
+//            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
+//
+//            Utils.matToBitmap(mat, bitmap);
+//            imageView.setImageBitmap(bitmap);
+//
+////            // The 'Next' button now appears, and the 'Files' and 'Camera' button disappear.
+////            next.setVisibility(View.VISIBLE);
+////            files.setVisibility(View.GONE);
+////            camera.setVisibility(View.GONE);
+//        }
 
     }
 
@@ -159,5 +163,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+//    @SpringBootApplication
+//    public class Main {
+//        public static void main(String[] args) {
+//            SpringApplication.run(Main.class, args);
+//        }
+//    }
 
 }

@@ -262,3 +262,73 @@ create_cxx_tasks
   [gap of 28ms]
 create_cxx_tasks completed in 277ms
 
+# C/C++ build system timings
+create_cxx_tasks
+  create-initial-cxx-model
+    create-module-model
+      [gap of 33ms]
+      create-project-model 14ms
+      [gap of 92ms]
+    create-module-model completed in 139ms
+    create-variant-model 47ms
+    create-ARMEABI_V7A-model 202ms
+    create-ARM64_V8A-model 45ms
+    create-X86-model 23ms
+    [gap of 13ms]
+    create-X86_64-model 32ms
+    create-module-model 13ms
+    [gap of 12ms]
+    create-variant-model 46ms
+    [gap of 11ms]
+    create-ARMEABI_V7A-model 52ms
+    create-ARM64_V8A-model 15ms
+    create-X86-model 83ms
+    create-X86_64-model 44ms
+  create-initial-cxx-model completed in 801ms
+  [gap of 71ms]
+create_cxx_tasks completed in 892ms
+
+# C/C++ build system timings
+create_cxx_tasks
+  create-initial-cxx-model
+    create-module-model
+      [gap of 17ms]
+      create-project-model 12ms
+      [gap of 94ms]
+    create-module-model completed in 123ms
+    create-variant-model 35ms
+    create-ARMEABI_V7A-model 122ms
+    create-ARM64_V8A-model 24ms
+    create-X86-model 15ms
+    create-X86_64-model 28ms
+    create-module-model 15ms
+    create-variant-model 14ms
+    create-ARMEABI_V7A-model 13ms
+    create-ARM64_V8A-model 13ms
+    create-X86-model 11ms
+    [gap of 10ms]
+  create-initial-cxx-model completed in 444ms
+  [gap of 49ms]
+create_cxx_tasks completed in 510ms
+
+# C/C++ build system timings
+create_cxx_tasks
+  create-initial-cxx-model
+    create-module-model 90ms
+    [gap of 21ms]
+    create-variant-model 56ms
+    create-ARMEABI_V7A-model 128ms
+    create-ARM64_V8A-model 20ms
+    create-X86-model 34ms
+    create-X86_64-model 23ms
+    [gap of 11ms]
+    create-module-model 13ms
+    create-variant-model 21ms
+    create-ARMEABI_V7A-model 26ms
+    create-ARM64_V8A-model 20ms
+    create-X86-model 28ms
+    create-X86_64-model 12ms
+  create-initial-cxx-model completed in 526ms
+  [gap of 58ms]
+create_cxx_tasks completed in 605ms
+
