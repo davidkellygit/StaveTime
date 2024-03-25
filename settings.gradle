@@ -21,3 +21,4 @@ rootProject.name = "StaveTime"
 include ':app'
 include ':openCV'
 include ':openCV2'
+include ':Audiveris'
