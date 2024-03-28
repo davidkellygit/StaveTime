@@ -1,9 +1,11 @@
 package com.example.stavetime;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,6 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.database.Cursor;
+import android.provider.OpenableColumns;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,47 +41,41 @@ public class MainActivity extends AppCompatActivity {
 
     // The attributes are defined here.
     Button files, next;
+    TextView selectedPDF;
     ImageView imageView;
-    Bitmap bitmap;
-    Mat mat;
     private ActivityResultLauncher<Intent> launcher;
+    boolean scoreSelected = false;
 
-    // The onCreate function is executed as the app opens.
+
+    // The onCreate function is executed like a 'main' function.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         if (OpenCVLoader.initDebug()) Log.d("LOADED", "success");
         else Log.d("LOADED", "error");
 
 
         files = findViewById(R.id.files);
-        imageView = findViewById(R.id.imageView);
         next = (Button) findViewById(R.id.next);
+        selectedPDF = findViewById(R.id.selectedPDF);
 
-
-        // Updated way of using 'startActivityForResult'
+        // The launcher allows a user to select a PDF from their phone's storage.
+        // This is run when the 'files' button is pressed.
         launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        try {
-                            Intent data = result.getData();
-                            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                            imageView.setImageBitmap(bitmap);
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Uri pdfUri = data.getData();
+                            String pdfName = getFileName(pdfUri);
+                            selectedPDF.setText(pdfName);
 
-                            mat = new Mat();
-                            Utils.bitmapToMat(bitmap, mat);
-
-                            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
-
-                            Utils.matToBitmap(mat, bitmap);
-                            imageView.setImageBitmap(bitmap);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
                         }
+                    } else {
+                        Toast.makeText(MainActivity.this, "No PDF selected", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -84,29 +84,37 @@ public class MainActivity extends AppCompatActivity {
         files.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                // This is same as we go one activity to another
-                //Intent intent = new Intent(MainActivity.this,SecondActivity.class);
-
-                // Rather than calling startActivity(intent) we use this code
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("application/pdf");
                 launcher.launch(intent);
             }
         });
-//                // !! registerForActivityResult() !!
-//                // See below:
-//                // https://www.geeksforgeeks.org/how-to-use-activityforresultluncher-as-startactivityforresult-is-deprecated-in-android/
-
 
         // Listens for the 'next' button, which switches to the next screen.
         next.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, Activity2.class);
             startActivity(intent);
         });
-
-
     }
 
 
+
+    // This function reads the file name of the user's chosen PDF.
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (columnIndex != -1) {
+                        result = cursor.getString(columnIndex);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
 }

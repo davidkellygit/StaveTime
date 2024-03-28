@@ -3,8 +3,8 @@
     <style name="Theme.StaveTime" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_grey</item>
-        <item name="colorPrimaryVariant">@color/light_grey</item>
+        <item name="colorPrimary">@color/dark_grey</item>
+        <item name="colorPrimaryVariant">@color/dark_grey</item>
         <item name="colorOnPrimary">@color/black</item>
 
         <!-- Secondary brand color. -->
