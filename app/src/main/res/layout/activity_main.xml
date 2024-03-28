@@ -10,13 +10,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-<!--    <org.opencv.android.JavaCameraView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:id="@+id/cameraView"/>-->
-
-
-        <!--Display the logo in the top left corner-->
+        <!--Logo-->
         <ImageView
             android:id="@+id/logo"
             android:layout_width="100dp"
@@ -25,6 +19,7 @@
             android:layout_marginTop="20dp"
             app:srcCompat="@mipmap/ic_launcher" />
 
+        <!--Select Score button-->
         <Button
             android:id="@+id/files"
             android:text="Select a score (PDF)"
@@ -34,6 +29,7 @@
             android:layout_marginTop="20dp"
             android:theme="@style/Theme.StaveTime"/>
 
+        <!--Name of chosen file-->
         <TextView
             android:id="@+id/selectedPDF"
             android:layout_width="wrap_content"
@@ -44,12 +40,24 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/white"/>
 
+        <!--Next button-->
         <Button
             android:id="@+id/next"
             android:text="Next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/selectedPDF"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:theme="@style/Theme.StaveTime"/>
+
+        <!--Next button-->
+        <Button
+            android:id="@+id/loader"
+            android:text="Load ->"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/next"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:theme="@style/Theme.StaveTime"/>

@@ -10,7 +10,7 @@
     android:orientation="vertical"
     tools:context=".Activity2">
 
-        <!--Display the logo in the top left corner-->
+        <!--Logo-->
         <ImageView
             android:id="@+id/logo"
             android:layout_width="100dp"

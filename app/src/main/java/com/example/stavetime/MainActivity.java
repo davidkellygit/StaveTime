@@ -84,17 +84,19 @@ public class MainActivity extends AppCompatActivity {
         files.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType("application/pdf");
-                launcher.launch(intent);
+                Intent filesIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                filesIntent.setType("application/pdf");
+                launcher.launch(filesIntent);
             }
         });
 
         // Listens for the 'next' button, which switches to the next screen.
         next.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Activity2.class);
-            startActivity(intent);
+            Intent nextIntent = new Intent(MainActivity.this, Activity2.class);
+            startActivity(nextIntent);
         });
+
+
     }
 
 
