@@ -27,9 +27,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"
-            android:theme="@style/Theme.StaveTime"/>
+            android:theme="@style/Theme.StaveTime"
+            />
 
-        <!--Name of chosen file-->
+        <!--Text: Name of chosen file-->
         <TextView
             android:id="@+id/selectedPDF"
             android:layout_width="wrap_content"
@@ -38,7 +39,8 @@
             android:layout_below="@id/files"
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            />
 
         <!--Next button-->
         <Button
@@ -49,17 +51,8 @@
             android:layout_below="@id/selectedPDF"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:theme="@style/Theme.StaveTime"/>
+            android:theme="@style/Theme.StaveTime"
+            />
 
-        <!--Next button-->
-        <Button
-            android:id="@+id/loader"
-            android:text="Load ->"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/next"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:theme="@style/Theme.StaveTime"/>
 
 </RelativeLayout>

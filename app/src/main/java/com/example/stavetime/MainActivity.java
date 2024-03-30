@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,15 +37,17 @@ import org.opencv.imgproc.Imgproc;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class MainActivity extends AppCompatActivity {
 
     // The attributes are defined here.
     Button files, next;
     TextView selectedPDF;
-    ImageView imageView;
     private ActivityResultLauncher<Intent> launcher;
     boolean scoreSelected = false;
+    private static final String LAPTOP_IP_ADDRESS = "192.168.209.51";
+
 
 
     // The onCreate function is executed like a 'main' function.
@@ -96,9 +99,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextIntent);
         });
 
-
     }
-
 
 
     // This function reads the file name of the user's chosen PDF.
