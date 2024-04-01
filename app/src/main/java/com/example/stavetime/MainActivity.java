@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     TextView selectedPDF;
     private ActivityResultLauncher<Intent> launcher;
     boolean scoreSelected = false;
-    private static final String LAPTOP_IP_ADDRESS = "192.168.209.51";
+    String pdfName;
 
 
 
@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         if (data != null) {
                             Uri pdfUri = data.getData();
-                            String pdfName = getFileName(pdfUri);
+                            pdfName = getFileName(pdfUri);
                             selectedPDF.setText(pdfName);
 
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "No PDF selected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -93,16 +93,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Listens for the 'next' button, which switches to the next screen.
+        // Listens for the 'next' button.
+        // This will switch to the next screen if a PDF has been selected.
         next.setOnClickListener(v -> {
-            Intent nextIntent = new Intent(MainActivity.this, Activity2.class);
-            startActivity(nextIntent);
+            if (pdfName != null) {
+                Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
+                startActivity(nextButtonIntent);
+            }
+            else {
+                Toast.makeText(MainActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
+            }
         });
-
     }
 
 
-    // This function reads the file name of the user's chosen PDF.
+    // This function returns the file name of a PDF.
     private String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
