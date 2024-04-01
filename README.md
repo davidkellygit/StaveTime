@@ -1,6 +1,6 @@
-<header>
+<h1>
   StaveTime
-</header>
+</h1>
 <body>
   My FYP is an Android application that can read sheet music and play it back to the user.
   
