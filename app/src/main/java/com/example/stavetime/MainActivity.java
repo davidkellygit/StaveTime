@@ -39,6 +39,11 @@ import org.opencv.imgproc.Imgproc;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
 
     // The attributes are defined here.
@@ -59,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
         if (OpenCVLoader.initDebug()) Log.d("LOADED", "success");
         else Log.d("LOADED", "error");
 
-
         files = findViewById(R.id.files);
         next = (Button) findViewById(R.id.next);
         selectedPDF = findViewById(R.id.selectedPDF);
+
 
         // The launcher allows a user to select a PDF from their phone's storage.
         // This is run when the 'files' button is pressed.
@@ -91,20 +96,43 @@ public class MainActivity extends AppCompatActivity {
                 filesIntent.setType("application/pdf");
                 launcher.launch(filesIntent);
             }
-        });
+        }); // End files Listener
 
         // Listens for the 'next' button.
         // This will switch to the next screen if a PDF has been selected.
         next.setOnClickListener(v -> {
-            if (pdfName != null) {
+
+            // **** CHANGE BEFORE DEMO
+            if (pdfName == null) {
+
+                // Preparing to make an API Call.
+                Call<API_Client.ApiResponse> call =
+                        API_Client.client.testApi("david");
+
+                // Execute the api call asynchronously. Get a positive or negative callback.
+                call.enqueue(new Callback<API_Client.ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<API_Client.ApiResponse> call, Response<API_Client.ApiResponse> response) {
+                        Log.d("MESSAGE",response.body().getText());
+                    }
+
+                    @Override
+                    public void onFailure(Call<API_Client.ApiResponse> call, Throwable t) {
+                        // the network call was a failure
+                        // TODO: handle error
+                        Log.d("ERROR", t.toString());
+                    }
+                });
+
                 Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
                 startActivity(nextButtonIntent);
             }
             else {
                 Toast.makeText(MainActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
             }
-        });
-    }
+        }); // End next listener
+
+    } // End OnCreate()
 
 
     // This function returns the file name of a PDF.
