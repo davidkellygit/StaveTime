@@ -1,3 +1,7 @@
+/*
+ * Comment explaining the role of Activity2.java
+ * */
+
 package com.example.stavetime;
 
 import androidx.appcompat.app.AppCompatActivity;

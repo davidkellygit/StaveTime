@@ -1,3 +1,7 @@
+/*
+* Comment explaining the role of MainActivity.java
+* */
+
 package com.example.stavetime;
 
 import android.Manifest;
@@ -9,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -36,9 +41,13 @@ import org.opencv.imgproc.Imgproc;
 //import org.springframework.boot.SpringApplication;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     Button files, next;
     TextView selectedPDF;
     private ActivityResultLauncher<Intent> launcher;
-    boolean scoreSelected = false;
     String pdfName;
+    Uri pdfUri;
 
 
 
@@ -77,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            Uri pdfUri = data.getData();
+                            pdfUri = data.getData();
                             pdfName = getFileName(pdfUri);
                             selectedPDF.setText(pdfName);
 
@@ -102,17 +111,24 @@ public class MainActivity extends AppCompatActivity {
         // This will switch to the next screen if a PDF has been selected.
         next.setOnClickListener(v -> {
 
-            // **** CHANGE BEFORE DEMO
+            // **** CHANGE TO != BEFORE DEMO
+            // == JUST FOR TESTING API CONNECTION
             if (pdfName == null) {
 
+                // Store the actual PDF file in the variable 'pdfUri'.
+                File file = FileUtils.getFile(this, pdfUri);
                 // Preparing to make an API Call.
-                Call<API_Client.ApiResponse> call =
-                        API_Client.client.testApi("david");
+                Call<API_Client.ApiResponse> call = API_Client.client.uploadFile(FileUtils.getFile(this, pdfUri));
+
+                // Checkpoint
+                // https://futurestud.io/tutorials/retrofit-2-how-to-upload-files-to-server
 
                 // Execute the api call asynchronously. Get a positive or negative callback.
                 call.enqueue(new Callback<API_Client.ApiResponse>() {
                     @Override
-                    public void onResponse(Call<API_Client.ApiResponse> call, Response<API_Client.ApiResponse> response) {
+                    public void onResponse(Call<API_Client.ApiResponse> call,
+                                           Response<API_Client.ApiResponse> response) {
+
                         Log.d("MESSAGE",response.body().getText());
                     }
 

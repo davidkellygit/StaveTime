@@ -1,10 +1,20 @@
+/*
+* Comment explaining the role of API_Client.java
+* */
+
 package com.example.stavetime;
 
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public class API_Client {
@@ -21,8 +31,15 @@ public class API_Client {
 
     // Defines the API - Tells the client all the methods in FastAPI.
     public interface ApiClient {
+        //Using for testing
         @GET("/users/{user}")
         Call<ApiResponse> testApi(@Path("user") String user);
+
+        // Method to upload a PDF file
+        @Multipart
+        @PUT("/uploadfile/")
+        Call<ResponseBody> uploadFile(@Part MultipartBody.Part file);
+
     }
 
     static String API_BASE_URL = "http://10.0.2.2:8080";
