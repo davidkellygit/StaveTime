@@ -4,6 +4,8 @@
 
 package com.example.stavetime;
 
+import static com.example.stavetime.API_Client.client;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.FileUtils;
+//import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import org.apache.commons.io.FileUtils;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -48,6 +51,7 @@ import java.net.InetAddress;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -97,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
+
         // Listens for the 'files' button.
         files.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,34 +117,49 @@ public class MainActivity extends AppCompatActivity {
         // This will switch to the next screen if a PDF has been selected.
         next.setOnClickListener(v -> {
 
-            // **** CHANGE TO != BEFORE DEMO
-            // == JUST FOR TESTING API CONNECTION
-            if (pdfName == null) {
+            if (pdfName != null) {
 
                 // Store the actual PDF file in the variable 'pdfUri'.
-                File file = FileUtils.getFile(this, pdfUri);
-                // Preparing to make an API Call.
-                Call<API_Client.ApiResponse> call = API_Client.client.uploadFile(FileUtils.getFile(this, pdfUri));
+                File file = new File(pdfUri.getPath());
 
-                // Checkpoint
-                // https://futurestud.io/tutorials/retrofit-2-how-to-upload-files-to-server
+                Log.v("File Path", pdfUri.getPath());
 
-                // Execute the api call asynchronously. Get a positive or negative callback.
-                call.enqueue(new Callback<API_Client.ApiResponse>() {
+                // create RequestBody instance from file
+                RequestBody requestFile =
+                        RequestBody.create(
+                                MediaType.parse(getContentResolver().getType(pdfUri)),
+                                file
+                        );
+
+                // MultipartBody.Part is used to send also the actual file name
+                MultipartBody.Part body = MultipartBody.Part.createFormData(
+                        "picture",
+                        file.getName(),
+                        requestFile
+                );
+
+                // add another part within the multipart request
+                String descriptionString = "This is the description :)";
+                RequestBody description = RequestBody.create(
+                        okhttp3.MultipartBody.FORM,
+                        descriptionString
+                );
+
+                // finally, execute the request
+                Call<ResponseBody> call = client.uploadFile(body);
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<API_Client.ApiResponse> call,
-                                           Response<API_Client.ApiResponse> response) {
-
-                        Log.d("MESSAGE",response.body().getText());
+                    public void onResponse(Call<ResponseBody> call,
+                                           Response<ResponseBody> response) {
+                        Log.v("Upload", "success");
                     }
 
                     @Override
-                    public void onFailure(Call<API_Client.ApiResponse> call, Throwable t) {
-                        // the network call was a failure
-                        // TODO: handle error
-                        Log.d("ERROR", t.toString());
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("Upload error:", t.getMessage());
                     }
                 });
+
 
                 Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
                 startActivity(nextButtonIntent);
@@ -170,3 +191,4 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 }
+
