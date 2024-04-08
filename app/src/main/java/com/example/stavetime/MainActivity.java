@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 //import android.os.FileUtils;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -60,12 +61,11 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     // The attributes are defined here.
-    Button files, next;
+    Button selectScore, next;
     TextView selectedPDF;
     private ActivityResultLauncher<Intent> launcher;
     String pdfName;
     Uri pdfUri;
-
 
 
     // The onCreate function is executed like a 'main' function.
@@ -77,13 +77,12 @@ public class MainActivity extends AppCompatActivity {
         if (OpenCVLoader.initDebug()) Log.d("LOADED", "success");
         else Log.d("LOADED", "error");
 
-        files = findViewById(R.id.files);
+        selectScore = findViewById(R.id.selectScore);
         next = (Button) findViewById(R.id.next);
         selectedPDF = findViewById(R.id.selectedPDF);
 
-
-        // The launcher allows a user to select a PDF from their phone's storage.
-        // This is run when the 'files' button is pressed.
+        // The launcher allows a user to select a PDF from the phone's storage.
+        // This is run when the 'selectScore' button is pressed.
         launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -101,17 +100,15 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-
-
-        // Listens for the 'files' button.
-        files.setOnClickListener(new View.OnClickListener() {
+        // Listens for the 'selectScore' button.
+        selectScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent filesIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                filesIntent.setType("application/pdf");
-                launcher.launch(filesIntent);
+                Intent selectScoreIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                selectScoreIntent.setType("application/pdf"); // Limits user's choice to a PDF only.
+                launcher.launch(selectScoreIntent);
             }
-        }); // End files Listener
+        }); // End selectScore.setOnClickListener
 
         // Listens for the 'next' button.
         // This will switch to the next screen if a PDF has been selected.
@@ -119,21 +116,25 @@ public class MainActivity extends AppCompatActivity {
 
             if (pdfName != null) {
 
+                File path = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES);
+
                 // Store the actual PDF file in the variable 'pdfUri'.
                 File file = new File(pdfUri.getPath());
 
+                // For testing: Print the name of the file path to the logs.
                 Log.v("File Path", pdfUri.getPath());
 
-                // create RequestBody instance from file
+                // Create RequestBody instance from file.
                 RequestBody requestFile =
                         RequestBody.create(
                                 MediaType.parse(getContentResolver().getType(pdfUri)),
                                 file
                         );
 
-                // MultipartBody.Part is used to send also the actual file name
+                // MultipartBody.Part is used to send the actual file name.
                 MultipartBody.Part body = MultipartBody.Part.createFormData(
-                        "picture",
+                        "pdf",
                         file.getName(),
                         requestFile
                 );
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e("Upload error:", t.getMessage());
                     }
-                });
+                }); // End call.enqueue
 
 
                 Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Toast.makeText(MainActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
             }
-        }); // End next listener
+        }); // End next.setOnClickListener
 
     } // End OnCreate()
 

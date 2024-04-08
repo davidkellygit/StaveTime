@@ -24,7 +24,7 @@
 
         <!--Select Score button-->
         <Button
-            android:id="@+id/files"
+            android:id="@+id/selectScore"
             android:text="Select a score (PDF)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_below="@id/files"
+            android:layout_below="@id/selectScore"
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:textColor="@color/white"
