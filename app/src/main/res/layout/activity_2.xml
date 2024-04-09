@@ -20,7 +20,17 @@
             android:layout_height="100dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+
             app:srcCompat="@mipmap/ic_launcher" />
+
+        <!--PDF Viewer-->
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="300dp"
+            android:layout_height="423dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/logo"/>
 
         <!-- Pause & Play buttons for the music -->
         <Button
@@ -28,18 +38,18 @@
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Pause"/>
+            android:layout_marginLeft="50dp"
+            android:text="Pause"
+            android:layout_below="@id/pdfView"/>
 
         <Button
             android:id="@+id/play"
             android:text="Play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="240dp"
             android:theme="@style/Theme.StaveTime"
-            android:layout_below="@id/pause"/>
+            android:layout_below="@id/pdfView"/>
 
 </RelativeLayout>
 

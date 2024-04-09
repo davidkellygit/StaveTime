@@ -42,9 +42,6 @@ import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-//import org.springframework.boot.SpringApplication;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -115,9 +112,6 @@ public class MainActivity extends AppCompatActivity {
         next.setOnClickListener(v -> {
 
             if (pdfName != null) {
-
-                File path = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
 
                 // Store the actual PDF file in the variable 'pdfUri'.
                 File file = new File(pdfUri.getPath());
