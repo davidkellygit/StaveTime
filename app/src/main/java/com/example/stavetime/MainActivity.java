@@ -5,9 +5,13 @@
 package com.example.stavetime;
 
 import static com.example.stavetime.API_Client.client;
+import static com.example.stavetime.FileUtil.*;
+
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,7 +19,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-//import android.os.FileUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -26,7 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
 import android.provider.OpenableColumns;
+import android.text.Html;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,15 +42,12 @@ import androidx.core.content.ContextCompat;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
-import org.apache.commons.io.FileUtils;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -64,15 +67,11 @@ public class MainActivity extends AppCompatActivity {
     String pdfName;
     Uri pdfUri;
 
-
-    // The onCreate function is executed like a 'main' function.
+    // The onCreate function is executed like a 'main' function;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (OpenCVLoader.initDebug()) Log.d("LOADED", "success");
-        else Log.d("LOADED", "error");
 
         selectScore = findViewById(R.id.selectScore);
         next = (Button) findViewById(R.id.next);
@@ -97,6 +96,24 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
+
+//        ActivityResultLauncher launcher =
+//                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+//                        new ActivityResultCallback<ActivityResult>() {
+//                            @Override
+//                            public void onActivityResult(ActivityResult result) {
+//                                if (result.getResultCode() == Activity.RESULT_OK) {
+//                                    // Use the uri to load the image
+//                                    pdfUri = result.getData().getData();
+//                                    // Use the file path to set image or upload
+////                                    String filePath = result.getData().getStringExtra(Const.BundleExtras.FILE_PATH);
+//                                    //...
+//
+//                                }
+//                            }
+//                        });
+
         // Listens for the 'selectScore' button.
         selectScore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,25 +128,28 @@ public class MainActivity extends AppCompatActivity {
         // This will switch to the next screen if a PDF has been selected.
         next.setOnClickListener(v -> {
 
-            if (pdfName != null) {
+            if (pdfUri != null) {
+
+                try {
+                    InputStream inputstream = getContentResolver().openInputStream(pdfUri);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // Store the actual PDF file in the variable 'pdfUri'.
-                File file = new File(pdfUri.getPath());
+//                File file2 = FileUtils.getFile(this, pdfUri);
 
                 // For testing: Print the name of the file path to the logs.
                 Log.v("File Path", pdfUri.getPath());
 
                 // Create RequestBody instance from file.
                 RequestBody requestFile =
-                        RequestBody.create(
-                                MediaType.parse(getContentResolver().getType(pdfUri)),
-                                file
-                        );
+                        new ContentUriRequestBody(getContentResolver(), pdfUri);
 
                 // MultipartBody.Part is used to send the actual file name.
                 MultipartBody.Part body = MultipartBody.Part.createFormData(
-                        "pdf",
-                        file.getName(),
+                        "file",
+                        "penis.pdf",
                         requestFile
                 );
 

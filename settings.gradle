@@ -10,16 +10,17 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jcenter.bintray.com" }
+//        maven { url "https://jitpack.io" }
+//        maven { url "https://jcenter.bintray.com" }
     }
     versionCatalogs {
-        openCVLibrary310 {
-            from files('gradle/openCVLibrary310.versions.toml')
-        }
+//        openCVLibrary310 {
+//            from files('gradle/openCVLibrary310.versions.toml')
+//        }
     }
 }
 rootProject.name = "StaveTime"
 include ':app'
-include ':openCV'
-include ':openCV2'
-include ':Audiveris'
+//include ':openCV'
+//include ':openCV2'
+//include ':Audiveris'

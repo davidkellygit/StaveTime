@@ -13,6 +13,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -37,7 +38,7 @@ public class API_Client {
 
         // Method to upload a PDF file
         @Multipart
-        @PUT("/uploadfile/")
+        @POST("/uploadfile/")
         Call<ResponseBody> uploadFile(@Part MultipartBody.Part file);
 
     }

@@ -23,33 +23,32 @@
 
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <!--PDF Viewer-->
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdfView"
-            android:layout_width="300dp"
-            android:layout_height="423dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_below="@id/logo"/>
+<!--        &lt;!&ndash;PDF of Sheet Music&ndash;&gt;-->
+<!--        <com.github.barteksc.pdfviewer.PDFView-->
+<!--            android:id="@+id/pdfView"-->
+<!--            android:layout_width="300dp"-->
+<!--            android:layout_height="423dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_below="@id/logo"/>-->
 
-        <!-- Pause & Play buttons for the music -->
+        <!--Pause button-->
         <Button
             android:theme="@style/Theme.StaveTime"
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:text="Pause"
-            android:layout_below="@id/pdfView"/>
+            android:text="Pause "/>
 
+        <!--Play button-->
         <Button
             android:id="@+id/play"
-            android:text="Play"
+            android:text="Play "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="240dp"
-            android:theme="@style/Theme.StaveTime"
-            android:layout_below="@id/pdfView"/>
+            android:theme="@style/Theme.StaveTime"/>
 
 </RelativeLayout>
 
