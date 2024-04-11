@@ -44,6 +44,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -97,23 +98,6 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-
-//        ActivityResultLauncher launcher =
-//                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-//                        new ActivityResultCallback<ActivityResult>() {
-//                            @Override
-//                            public void onActivityResult(ActivityResult result) {
-//                                if (result.getResultCode() == Activity.RESULT_OK) {
-//                                    // Use the uri to load the image
-//                                    pdfUri = result.getData().getData();
-//                                    // Use the file path to set image or upload
-////                                    String filePath = result.getData().getStringExtra(Const.BundleExtras.FILE_PATH);
-//                                    //...
-//
-//                                }
-//                            }
-//                        });
-
         // Listens for the 'selectScore' button.
         selectScore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,16 +114,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (pdfUri != null) {
 
+                //
                 try {
                     InputStream inputstream = getContentResolver().openInputStream(pdfUri);
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
 
-                // Store the actual PDF file in the variable 'pdfUri'.
-//                File file2 = FileUtils.getFile(this, pdfUri);
-
-                // For testing: Print the name of the file path to the logs.
+                // Print the name of the file path to the logs.
                 Log.v("File Path", pdfUri.getPath());
 
                 // Create RequestBody instance from file.
@@ -149,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 // MultipartBody.Part is used to send the actual file name.
                 MultipartBody.Part body = MultipartBody.Part.createFormData(
                         "file",
-                        "penis.pdf",
+                        pdfName,
                         requestFile
                 );
 
@@ -160,12 +142,11 @@ public class MainActivity extends AppCompatActivity {
                         descriptionString
                 );
 
-                // finally, execute the request
-                Call<ResponseBody> call = client.uploadFile(body);
-                call.enqueue(new Callback<ResponseBody>() {
+                // finally, execute the post request for the PDF.
+                Call<ResponseBody> call1 = client.uploadFile(body);
+                call1.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call,
-                                           Response<ResponseBody> response) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Log.v("Upload", "success");
                     }
 
@@ -173,9 +154,38 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e("Upload error:", t.getMessage());
                     }
-                }); // End call.enqueue
+                }); // End call1.enqueue
 
 
+                /* This bit is a work in progress :)
+
+                // Download the MP3 file from the server. (Post request)
+                Call<ResponseBody> call2 = client.downloadFile();
+                call2.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                FileOutputStream fos = new FileOutputStream("content://com.android.providers.downloads.documents/document/downloads");
+                                fos.write(response.body().bytes());
+                                fos.close();
+
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                }); // End call2.enqueue
+
+                //End work of progress
+                */
+
+                // Move on to the next screen.
                 Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
                 startActivity(nextButtonIntent);
             }

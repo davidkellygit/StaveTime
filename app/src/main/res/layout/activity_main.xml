@@ -22,6 +22,17 @@
             android:layout_marginTop="20dp"
             app:srcCompat="@mipmap/ic_launcher" />
 
+        <!--'StaveTime' Header-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="20dp"
+            android:text="StaveTime"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="30dp"/>
+
         <!--Select Score button-->
         <Button
             android:id="@+id/selectScore"

@@ -41,6 +41,10 @@ public class API_Client {
         @POST("/uploadfile/")
         Call<ResponseBody> uploadFile(@Part MultipartBody.Part file);
 
+        // Method to download an MP3 file
+        @GET("/downloadfile/")
+        Call<ResponseBody> downloadFile();
+
     }
 
     static String API_BASE_URL = "http://10.0.2.2:8080";
