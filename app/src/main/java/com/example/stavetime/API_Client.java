@@ -4,6 +4,8 @@
 
 package com.example.stavetime;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -49,7 +51,10 @@ public class API_Client {
 
     static String API_BASE_URL = "http://10.0.2.2:8080";
 
-    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(1000, TimeUnit.SECONDS)
+            .readTimeout(1000, TimeUnit.SECONDS);
 
     static Retrofit.Builder builder =
             new Retrofit.Builder()

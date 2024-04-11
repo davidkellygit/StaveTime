@@ -7,7 +7,6 @@ package com.example.stavetime;
 import static com.example.stavetime.API_Client.client;
 import static com.example.stavetime.FileUtil.*;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
@@ -47,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
                     }
                 }
-        );
+        ); // End launcher
 
 
         // Listens for the 'selectScore' button.
@@ -148,6 +148,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Log.v("Upload", "success");
+                        Log.d("Contents", response.body().toString());
+
+                        boolean writtenToDisk = writeResponseBodyToDisk(response.body());
+
                     }
 
                     @Override
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                 /* This bit is a work in progress :)
 
-                // Download the MP3 file from the server. (Post request)
+                // Download the MP3 file from the server. (Get request)
                 Call<ResponseBody> call2 = client.downloadFile();
                 call2.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -214,6 +218,76 @@ public class MainActivity extends AppCompatActivity {
             result = uri.getLastPathSegment();
         }
         return result;
-    }
-}
+
+    } // End getFileName()
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + changeFileExtension(pdfName, "mp3"));
+            Log.d("File Path", futureStudioIconFile.getAbsolutePath());
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("File Download", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    } // End writeResponseBodyToDisk()
+
+
+    // This function changes the file extension of a given file name.
+    private String changeFileExtension(String filename, String newExtension) {
+
+        int lastDotIndex = filename.lastIndexOf(".");
+
+        if (lastDotIndex == -1) {
+            // If the filename doesn't contain any '.', simply append the new extension
+            return filename + "." + newExtension;
+        }
+        else {
+            // Otherwise, replace the existing extension with the new one
+            return filename.substring(0, lastDotIndex) + "." + newExtension;
+        }
+
+    } // End changeFileExtension()
+
+} // End class MainActivity
 
