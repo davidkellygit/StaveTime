@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Comment explaining the role of activity_main.xml-->
+<!--This provides the style layout for MainActivity.java-->
+<!--Author: David Kelly-->
+<!--Date: 12th April 2024-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +26,7 @@
 
         <!--'StaveTime' Header-->
         <TextView
+            android:id="@+id/StaveTimeHeader"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginLeft="130dp"
@@ -33,10 +36,25 @@
             android:fontFamily="sans-serif-condensed-medium"
             android:textSize="30dp"/>
 
+        <!--Text: Welcome-->
+        <TextView
+            android:id="@+id/Welcome"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="130dp"
+            android:layout_marginBottom="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/selectedPDF"
+            android:gravity="center"
+            android:text="Let me read your music for you!"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="30dp"/>
+
         <!--Select Score button-->
         <Button
             android:id="@+id/selectScore"
-            android:text="Select a score (PDF)"
+            android:text="Select a score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

@@ -1,42 +1,40 @@
 /*
-* Comment explaining the role of MainActivity.java
-* */
+This class is the brains of the operation.
+In this MainActivity, there are two buttons:
+1. Select a score
+2. Next
+
+The 'select a score' button allows the user to choose
+a music score from their device in PDF format.
+
+The 'next' button triggers a call to the server (hosted
+on my laptop). The user's chosen PDF gets sent to the server,
+and the optical music recognition takes place there.
+
+Once the 'next button has been hit, the program moves
+on to the next screen: Activity2.java
+
+Author: David Kelly
+Date: 12th April 2024
+*/
 
 package com.example.stavetime;
 
 import static com.example.stavetime.API_Client.client;
-import static com.example.stavetime.FileUtil.*;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
 import android.provider.OpenableColumns;
-import android.text.Html;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -47,25 +45,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.util.ArrayList;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    // The attributes are defined here.
+    // Attributes defined here.
     Button selectScore, next;
     TextView selectedPDF;
-    private ActivityResultLauncher<Intent> launcher;
-    String pdfName;
+    ActivityResultLauncher<Intent> launcher;
+    static String pdfName;
     Uri pdfUri;
 
     // The onCreate function is executed like a 'main' function;
@@ -74,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        selectScore = findViewById(R.id.selectScore);
+        selectScore = (Button) findViewById(R.id.selectScore);
         next = (Button) findViewById(R.id.next);
         selectedPDF = findViewById(R.id.selectedPDF);
 
@@ -142,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
                         descriptionString
                 );
 
-                // finally, execute the post request for the PDF.
-                Call<ResponseBody> call1 = client.uploadFile(body);
-                call1.enqueue(new Callback<ResponseBody>() {
+                // Execute the post request for the PDF.
+                Call<ResponseBody> call = client.uploadFile(body);
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Log.v("Upload", "success");
@@ -158,36 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e("Upload error:", t.getMessage());
                     }
-                }); // End call1.enqueue
-
-
-                /* This bit is a work in progress :)
-
-                // Download the MP3 file from the server. (Get request)
-                Call<ResponseBody> call2 = client.downloadFile();
-                call2.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                FileOutputStream fos = new FileOutputStream("content://com.android.providers.downloads.documents/document/downloads");
-                                fos.write(response.body().bytes());
-                                fos.close();
-
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                }); // End call2.enqueue
-
-                //End work of progress
-                */
+                }); // End call.enqueue
 
                 // Move on to the next screen.
                 Intent nextButtonIntent = new Intent(MainActivity.this, Activity2.class);
@@ -223,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
-            // todo change the file location/name according to your needs
             File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + changeFileExtension(pdfName, "mp3"));
             Log.d("File Path", futureStudioIconFile.getAbsolutePath());
 
@@ -274,12 +238,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     // This function changes the file extension of a given file name.
-    private String changeFileExtension(String filename, String newExtension) {
+    public static String changeFileExtension(String filename, String newExtension) {
 
         int lastDotIndex = filename.lastIndexOf(".");
 
         if (lastDotIndex == -1) {
-            // If the filename doesn't contain any '.', simply append the new extension
+            // If the filename doesn't contain any '.', add the new extension
             return filename + "." + newExtension;
         }
         else {

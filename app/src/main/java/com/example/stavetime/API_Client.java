@@ -1,6 +1,13 @@
 /*
-* Comment explaining the role of API_Client.java
-* */
+This class provides the app with the necessary information
+to send files to the server (hosted on my laptop).
+
+It uses Retrofit in order to communicate with the API,
+and to use CRUD operations.
+
+Author: David Kelly
+Date: 12th April 2024
+*/
 
 package com.example.stavetime;
 
@@ -8,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -16,19 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public class API_Client {
 
     public class ApiResponse {
-        private String text;
 
         public ApiResponse() {
-        }
-        public String getText() {
-            return text;
         }
     }
 
@@ -43,9 +44,6 @@ public class API_Client {
         @POST("/uploadfile/")
         Call<ResponseBody> uploadFile(@Part MultipartBody.Part file);
 
-        // Method to download an MP3 file
-        @GET("/downloadfile/")
-        Call<ResponseBody> downloadFile();
 
     }
 
